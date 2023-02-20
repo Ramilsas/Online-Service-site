@@ -77,16 +77,57 @@ class Sets(models.Model):
         return self.name
 
 
-# class Drinks(models.Model):
-#     # category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='salads')
-#     name = models.CharField(max_length=100)
-#     price = models.DecimalField(max_digits=5, decimal_places=0)
-#     image = models.ImageField(upload_to='/img')
-#     description = models.TextField()
+class Drinks(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=5, decimal_places=0)
+    image = models.ImageField(upload_to='images', null=True, blank=True)
+    description = models.TextField()
 
-#     class Meta:
-#         verbose_name = ''
-#         verbose_name_plural = 'Сеты'
+    class Meta:
+        verbose_name = 'Напиток'
+        verbose_name_plural = 'Напитки'
 
-#     def str(self):
-#         return self.name
+    def str(self):
+        return self.name
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='images', blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукты'
+
+    def __str__(self):
+        return self.name
+
+
+class Cart(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзины'
+
+    def __str__(self):
+        return str(self.created_at)
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Продукт в корзине'
+        verbose_name_plural = 'Продукты в корзине'
+
+    def __str__(self):
+        return f"{self.product} ({self.quantity})"
+
+
+
+
+
